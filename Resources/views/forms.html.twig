@@ -19,6 +19,20 @@
 {% endspaceless %}
 {% endblock field_row %}
 
+{% block field_rows %}
+{% spaceless %}
+    <div class="control-group{% if errors|length > 0 %} error{% endif %}">
+        {% for child in form %}
+            {{ form_row(child) }}
+        {% endfor %}
+        <div class="controls">
+            {{ form_errors(form) }}
+        </div>
+    </div>
+{% endspaceless %}
+{% endblock field_rows %}
+
+
 {% block field_widget %}
 {% spaceless %}
     {% set type = type|default('text') %}
