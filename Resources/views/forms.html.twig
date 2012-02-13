@@ -1,13 +1,65 @@
 {% extends 'form_div_layout.html.twig' %}
 
+{% block form_widget %}
+{% spaceless %}
+    {{ block('field_rows') }}
+    {{ form_rest(form) }}
+{% endspaceless %}
+{% endblock form_widget %}
+
 {% block field_row %}
 {% spaceless %}
-    <div class="control-group">
-        {{ form_label(form, label|default(null)) }}
-        {{ form_errors(form) }}
+    <div class="control-group{% if errors|length > 0 %} error{% endif %}">
+        {{ form_label(form) }}
         <div class="controls">
             {{ form_widget(form) }}
+            {{ form_errors(form) }}
         </div>
     </div>
 {% endspaceless %}
 {% endblock field_row %}
+
+{% block field_widget %}
+{% spaceless %}
+    {% set type = type|default('text') %}
+    <input type="{{ type }}" {{ block('widget_attributes') }} value="{{ value }}" placeholder="{{ label }}" />
+{% endspaceless %}
+{% endblock field_widget %}
+
+{% block field_errors %}
+{% spaceless %}
+    {% if errors|length > 0 %}
+        {% for error in errors %}
+            <span class="help-inline">{{ error.messageTemplate|trans(error.messageParameters, 'validators') }}</span>
+        {% endfor %}
+    {% endif %}
+{% endspaceless %}
+{% endblock field_errors %}
+
+{% block email_widget %}
+{% spaceless %}
+    {% set type = type|default('email') %}
+    <div class="input-prepend">
+        <span class="add-on">@</span>
+        {{ block('field_widget') }}
+    </div>
+{% endspaceless %}
+{% endblock email_widget %}
+
+{% block checkbox_row %}
+{% spaceless %}
+    <div class="control-group">
+        {% set attr = attr|merge({'class': attr.class|default('checkbox')}) %}
+        {% if required %}
+            {% set attr = attr|merge({'class': attr.class|default('') ~ ' required'}) %}
+        {% endif %}
+        {{ form_errors(form) }}
+        <div class="controls">
+            <label{% for attrname,attrvalue in attr %} {{attrname}}="{{attrvalue}}"{% endfor %}>
+                {{ form_widget(form) }}
+                {{ label|trans|raw }}
+            </label>
+        </div>
+    </div>
+{% endspaceless %}
+{% endblock %}
