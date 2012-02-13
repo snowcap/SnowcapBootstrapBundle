@@ -19,7 +19,7 @@
 {% endspaceless %}
 {% endblock field_row %}
 
-{% block field_rows %}
+{% block repeated_row %}
 {% spaceless %}
     <div class="control-group{% if errors|length > 0 %} error{% endif %}">
         {% for child in form %}
@@ -30,7 +30,7 @@
         </div>
     </div>
 {% endspaceless %}
-{% endblock field_rows %}
+{% endblock repeated_row %}
 
 
 {% block field_widget %}
