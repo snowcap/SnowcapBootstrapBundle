@@ -8,11 +8,12 @@
 {% endblock form_widget %}
 
 {% block field_row %}
+{% if attr is not defined %}{% set attr = {} %}{% endif %}
 {% spaceless %}
     <div class="control-group{% if errors|length > 0 %} error{% endif %}">
         {{ form_label(form) }}
         <div class="controls">
-            {{ form_widget(form) }}
+            {{ form_widget(form, {'attr': attr}) }}
             {{ form_errors(form) }}
         </div>
     </div>
@@ -31,14 +32,6 @@
     </div>
 {% endspaceless %}
 {% endblock repeated_row %}
-
-
-{% block field_widget %}
-{% spaceless %}
-    {% set type = type|default('text') %}
-    <input type="{{ type }}" {{ block('widget_attributes') }} value="{{ value }}" placeholder="{{ label }}" />
-{% endspaceless %}
-{% endblock field_widget %}
 
 {% block field_errors %}
 {% spaceless %}
@@ -59,6 +52,16 @@
     </div>
 {% endspaceless %}
 {% endblock email_widget %}
+
+{%block image_widget %}
+    {% if web_property is not null %}
+        {% set image_src = attribute(form.parent.vars.value, web_property) %}
+        {% if image_src is not null %}
+            <img src="/{{ image_src }}"/>
+        {% endif %}
+    {% endif %}
+    {{ block('field_widget') }}
+{% endblock %}
 
 {% block checkbox_row %}
 {% spaceless %}
