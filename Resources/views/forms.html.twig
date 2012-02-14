@@ -54,8 +54,8 @@
 {% endblock email_widget %}
 
 {%block image_widget %}
-    {% if web_property is not null %}
-        {% set image_src = attribute(form.parent.vars.value, web_property) %}
+    {% if web_path is not null %}
+        {% set image_src = attribute(form.parent.vars.value, web_path) %}
         {% if image_src is not null %}
             <img src="/{{ image_src }}"/>
         {% endif %}
