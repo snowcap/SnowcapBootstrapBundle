@@ -14,6 +14,11 @@
         {{ form_label(form) }}
         <div class="controls">
             {{ form_widget(form, {'attr': attr}) }}
+            {% if help_block is defined %}
+                <p class="help-block">{{ help_block }}</p>
+            {% elseif help_inline is defined %}
+                <span class="help-inline">{{ help_inline }}</span>
+            {% endif %}
             {{ form_errors(form) }}
         </div>
     </div>
