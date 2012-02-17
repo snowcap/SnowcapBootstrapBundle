@@ -1,0 +1,11 @@
+{% macro alert(text, type, title, close) %}
+<div class="alert{{ title|default('') is not empty ? ' alert-block' : '' }} alert-{{ type|default('warning') }}">
+    {% if close|default(false) %}
+        <a class="close">×</a>
+    {% endif %}
+    {% if title|default('') is not empty %}
+        <h4 class="alert-heading">{{ title }}</h4>
+    {% endif %}
+    {{ text }}
+</div>
+{% endmacro %}
