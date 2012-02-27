@@ -1,12 +1,5 @@
 {% extends 'form_div_layout.html.twig' %}
 
-{% block form_widget %}
-{% spaceless %}
-    {{ block('field_rows') }}
-    {{ form_rest(form) }}
-{% endspaceless %}
-{% endblock form_widget %}
-
 {% block field_row %}
 {% if attr is not defined %}{% set attr = {} %}{% endif %}
 {% spaceless %}
