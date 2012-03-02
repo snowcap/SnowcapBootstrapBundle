@@ -3,7 +3,7 @@
 {% block field_row %}
 {% if attr is not defined %}{% set attr = {} %}{% endif %}
 {% spaceless %}
-    <div class="control-group{% if errors|length > 0 %} error{% endif %}">
+    <div class="control-group{% if errors|length > 0 %} error{% endif %} {{ form_row_type_classes(types) }}">
         {{ form_label(form, null, {'attr': {'class': 'control-label'}}) }}
         <div class="controls">
             {{ form_widget(form, {'attr': attr}) }}
@@ -52,7 +52,7 @@
 {% endblock email_widget %}
 
 {%block snowcap_core_image_widget %}
-    {% if web_path is not null %}
+    {% if web_path is not null and value is not empty %}
         {% set image_src = attribute(form.parent.vars.value, web_path) %}
         {% if image_src is not null %}
             <img src="/{{ image_src }}"/>
