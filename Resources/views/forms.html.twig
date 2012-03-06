@@ -3,18 +3,28 @@
 {% block field_row %}
 {% if attr is not defined %}{% set attr = {} %}{% endif %}
 {% spaceless %}
+{% if 'form' in types %}
+    {{ form_widget(form, {'attr': attr}) }}
+    {% if help_block is defined %}
+        <p class="help-block">{{ help_block }}</p>
+    {% elseif help_inline is defined %}
+        <span class="help-inline">{{ help_inline }}</span>
+    {% endif %}
+    {{ form_errors(form) }}
+{% else %}
     <div class="control-group{% if errors|length > 0 %} error{% endif %} {{ form_row_type_classes(types) }}">
         {{ form_label(form, null, {'attr': {'class': 'control-label'}}) }}
         <div class="controls">
             {{ form_widget(form, {'attr': attr}) }}
             {% if help_block is defined %}
-                <p class="help-block">{{ help_block }}</p>
+            <p class="help-block">{{ help_block }}</p>
             {% elseif help_inline is defined %}
-                <span class="help-inline">{{ help_inline }}</span>
+            <span class="help-inline">{{ help_inline }}</span>
             {% endif %}
             {{ form_errors(form) }}
         </div>
     </div>
+{% endif %}
 {% endspaceless %}
 {% endblock field_row %}
 
