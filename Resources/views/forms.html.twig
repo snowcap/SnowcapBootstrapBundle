@@ -3,7 +3,7 @@
 {% block field_row %}
 {% if attr is not defined %}{% set attr = {} %}{% endif %}
 {% spaceless %}
-{% if 'form' in types or 'snowcap_admin_inline' in types %}
+{% if 'snowcap_admin_inline' in types %}
 <div class="control-group{% if errors|length > 0 %} error{% endif %} {{ form_row_type_classes(types) }}">
     {{ form_widget(form, {'attr': attr}) }}
     {% if help_block is defined %}
