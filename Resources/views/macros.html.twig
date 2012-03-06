@@ -9,3 +9,19 @@
     {{ text }}
 </div>
 {% endmacro %}
+
+{% macro modal(id, header, body, ok, cancel) %}
+<div class="modal fade" id="{{ id|default('modal') }}">
+  <div class="modal-header">
+    <a class="close" data-dismiss="modal">×</a>
+    <h3>{{ header|default('Confirm') }}</h3>
+  </div>
+  <div class="modal-body">
+    <p>{{ body|default('Are you sure ?') }}</p>
+  </div>
+  <div class="modal-footer">
+    <a href="#" class="btn btn-primary" data-accept="modal">{{ ok|default('Ok') }}</a>
+    <a href="#" class="btn" data-dismiss="modal">{{ cancel|default('Cancel') }}</a>
+  </div>
+</div>
+{% endmacro %}
