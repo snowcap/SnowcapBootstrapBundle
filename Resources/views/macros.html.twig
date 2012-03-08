@@ -1,7 +1,7 @@
 {% macro alert(text, type, title, close) %}
 <div class="alert{{ title|default('') is not empty ? ' alert-block' : '' }} alert-{{ type|default('warning') }}">
     {% if close|default(false) %}
-        <a class="close">×</a>
+        <a  href="#" class="close" data-dismiss="alert" >&times;</a>
     {% endif %}
     {% if title|default('') is not empty %}
         <h4 class="alert-heading">{{ title }}</h4>
