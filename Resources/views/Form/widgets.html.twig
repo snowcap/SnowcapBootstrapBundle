@@ -3,7 +3,7 @@
 {% block field_row %}
 {% if attr is not defined %}{% set attr = {} %}{% endif %}
 {% spaceless %}
-    <div class="control-group{% if errors|length > 0 %} error{% endif %} {{ form_row_type_classes(types) }}">
+    <div class="control-group{% if errors|length > 0 %} error{% endif %} {{ form_row_classes(types) }}">
         {{ form_label(form, null, {'attr': {'class': 'control-label'}}) }}
         <div class="controls">
             {{ form_widget(form, {'attr': attr}) }}
