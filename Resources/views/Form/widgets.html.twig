@@ -3,55 +3,100 @@
 {% block field_row %}
 {% if attr is not defined %}{% set attr = {} %}{% endif %}
 {% spaceless %}
-    <div class="control-group{% if errors|length > 0 %} error{% endif %} {{ form_row_classes(types) }}">
-        {{ form_label(form, null, {'attr': {'class': 'control-label'}}) }}
-        <div class="controls">
-            {{ form_widget(form, {'attr': attr}) }}
-            {% if help_block is defined %}
-            <p class="help-block">{{ help_block }}</p>
-            {% elseif help_inline is defined %}
-            <span class="help-inline">{{ help_inline }}</span>
-            {% endif %}
-            {{ form_errors(form) }}
-        </div>
+<div class="control-group{% if errors|length > 0 %} error{% endif %} {{ form_row_classes(types) }}">
+    {{ form_label(form, null, {'attr': {'class': 'control-label'}}) }}
+    <div class="controls">
+        {{ form_widget(form, {'attr': attr}) }}
+        {{ block('field_help') }}
+        {{ form_errors(form) }}
     </div>
+</div>
 {% endspaceless %}
 {% endblock field_row %}
 
 {% block repeated_row %}
-{% spaceless %}
-    <div class="control-group{% if errors|length > 0 %} error{% endif %}">
-        {% for child in form %}
-            {{ form_row(child) }}
-        {% endfor %}
-        <div class="controls">
-            {{ form_errors(form) }}
+    {% spaceless %}
+        <div class="control-group{% if errors|length > 0 %} error{% endif %}">
+            {% for child in form %}
+                {{ form_row(child) }}
+            {% endfor %}
+            <div class="controls">
+                {{ form_errors(form) }}
+            </div>
         </div>
-    </div>
-{% endspaceless %}
+    {% endspaceless %}
 {% endblock repeated_row %}
 
 {% block field_errors %}
-{% spaceless %}
-    {% if errors|length > 0 %}
-        {% for error in errors %}
-            <span class="help-inline">{{ error.messageTemplate|trans(error.messageParameters, 'validators') }}</span>
-        {% endfor %}
-    {% endif %}
-{% endspaceless %}
+    {% spaceless %}
+        {% if errors|length > 0 %}
+            {% for error in errors %}
+                {% if help_block is defined %}
+                    <p class="help-block">{{ error.messageTemplate|trans(error.messageParameters, 'validators') }}</p>
+                {% else %}
+                    <span class="help-inline">{{ error.messageTemplate|trans(error.messageParameters, 'validators') }}</span>
+                {% endif %}
+            {% endfor %}
+        {% endif %}
+    {% endspaceless %}
 {% endblock field_errors %}
 
 {% block email_widget %}
-{% spaceless %}
-    {% set type = type|default('email') %}
-    <div class="input-prepend">
-        <span class="add-on">@</span>
-        {{ block('field_widget') }}
-    </div>
-{% endspaceless %}
+    {% spaceless %}
+        {% set type = type|default('email') %}
+        <div class="input-prepend">
+            <span class="add-on">@</span>
+            {{ block('field_widget') }}
+        </div>
+    {% endspaceless %}
 {% endblock email_widget %}
 
-{%block snowcap_core_image_widget %}
+{% block checkbox_row %}
+    {% spaceless %}
+    <div class="control-group{% if errors|length > 0 %} error{% endif %} {{ form_row_classes(types) }}">
+        {% set attr = attr|merge({'class': attr.class|default('checkbox')}) %}
+        {% if required %}
+            {% set attr = attr|merge({'class': attr.class|default('') ~ ' required'}) %}
+        {% endif %}
+        <div class="controls">
+            <label{% for attrname,attrvalue in attr %} {{attrname}}="{{attrvalue}}"{% endfor %}>
+                {{ form_widget(form) }}
+                {{ label|trans|raw }}
+            </label>
+            {{ block('field_help') }}
+            {{ form_errors(form) }}
+        </div>
+    </div>
+    {% endspaceless %}
+{% endblock %}
+
+{% block choice_widget %}
+    {% spaceless %}
+        {% if expanded %}
+            <div {{ block('widget_container_attributes') }}>
+                {% set attr = attr|merge({'class': attr.class|default('radio')}) %}
+                {% for child in form %}
+                    <label{% for attrname,attrvalue in attr %} {{attrname}}="{{attrvalue}}"{% endfor %}>
+                        {{ form_widget(child) }}
+                        {{ child.get('label')|trans|raw }}
+                    </label>
+                {% endfor %}
+            </div>
+        {% else %}
+            {{ parent() }}
+        {% endif %}
+    {% endspaceless %}
+{% endblock choice_widget %}
+
+{% block field_help %}
+    {% if help_block is defined %}
+        <p class="help-block">{{ help_block }}</p>
+    {% elseif help_inline is defined %}
+        <span class="help-inline">{{ help_inline }}</span>
+    {% endif %}
+{% endblock field_help %}
+
+{% block snowcap_core_image_widget %}
     {% if web_path is not null and value is not empty %}
         {% set image_src = attribute(form.parent.vars.value, web_path) %}
         {% if image_src is not null %}
@@ -59,22 +104,4 @@
         {% endif %}
     {% endif %}
     {{ block('field_widget') }}
-{% endblock %}
-
-{% block checkbox_row %}
-{% spaceless %}
-    <div class="control-group">
-        {% set attr = attr|merge({'class': attr.class|default('checkbox')}) %}
-        {% if required %}
-            {% set attr = attr|merge({'class': attr.class|default('') ~ ' required'}) %}
-        {% endif %}
-        {{ form_errors(form) }}
-        <div class="controls">
-            <label{% for attrname,attrvalue in attr %} {{attrname}}="{{attrvalue}}"{% endfor %}>
-                {{ form_widget(form) }}
-                {{ label|trans|raw }}
-            </label>
-        </div>
-    </div>
-{% endspaceless %}
 {% endblock %}
