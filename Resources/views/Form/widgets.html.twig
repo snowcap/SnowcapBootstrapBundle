@@ -97,11 +97,21 @@
 {% endblock field_help %}
 
 {% block snowcap_core_image_widget %}
-    {% if web_path is not null and value is not empty %}
+    {% if web_path is not null and form.parent.vars.value is not empty %}
         {% set image_src = attribute(form.parent.vars.value, web_path) %}
         {% if image_src is not null %}
             <img src="/{{ image_src }}"/>
         {% endif %}
     {% endif %}
     {{ block('field_widget') }}
+{% endblock %}
+
+{% block snowcap_core_file_widget %}
+    {{ block('field_widget') }}
+    {% if web_path is not null and form.parent.vars.value is not empty %}
+        {% set url = attribute(form.parent.vars.value, web_path) %}
+        {% if url is not null %}
+            <a class="btn" href="/{{ url }}">Download file</a>
+        {% endif %}
+    {% endif %}
 {% endblock %}
