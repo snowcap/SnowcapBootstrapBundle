@@ -21,6 +21,7 @@
                 {{ form_row(child) }}
             {% endfor %}
             <div class="controls">
+                {{ block('field_help') }}
                 {{ form_errors(form) }}
             </div>
         </div>
@@ -74,7 +75,8 @@
     {% spaceless %}
         {% if expanded %}
             <div {{ block('widget_container_attributes') }}>
-                {% set attr = attr|merge({'class': attr.class|default('radio')}) %}
+                {% set extra_class = multiple ? 'checkbox' : 'radio' %}
+                {% set attr = attr|merge({'class': attr.class|default(extra_class)}) %}
                 {% for child in form %}
                     <label{% for attrname,attrvalue in attr %} {{attrname}}="{{attrvalue}}"{% endfor %}>
                         {{ form_widget(child) }}
