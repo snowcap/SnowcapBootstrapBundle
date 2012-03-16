@@ -1,0 +1,11 @@
+<div class="pagination">
+    <ul>
+        <li{% if paginator.page == 1 %} class="disabled"{% endif %}><a href="?page=1">«</a></li>
+        {% for i in 1..paginator.numPages %}
+        <li{% if paginator.page == i %} class="active"{% endif %}>
+            <a href="?page={{ i }}">{{ i }}</a>
+        </li>
+        {% endfor %}
+        <li{% if paginator.page == paginator.numPages %} class="disabled"{% endif %}><a href="?page={{ paginator.numPages }}">»</a></li>
+  </ul>
+</div>
