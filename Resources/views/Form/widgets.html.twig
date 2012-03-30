@@ -97,7 +97,7 @@
     {% if web_path is not null and form.parent.vars.value is not empty %}
         {% set image_src = attribute(form.parent.vars.value, web_path) %}
         {% if image_src is not null %}
-            <img src="/{{ image_src }}"/>
+            <img src="{{ image_src|imresize('admin_thumb') }}"/>
         {% endif %}
     {% endif %}
     {{ block('field_widget') }}
@@ -108,7 +108,7 @@
     {% if web_path is not null and form.parent.vars.value is not empty %}
         {% set url = attribute(form.parent.vars.value, web_path) %}
         {% if url is not null %}
-            <a class="btn" href="/{{ url }}">Download file</a>
+            <a class="btn" href="{{ asset(url) }}">Download file</a>
         {% endif %}
     {% endif %}
 {% endblock %}
