@@ -50,7 +50,7 @@
 {% block checkbox_row %}
     {% spaceless %}
     <div class="control-group{% if errors|length > 0 %} error{% endif %} {{ form_row_classes(types) }}">
-        {% set attr = attr|merge({'class': attr.class|default('checkbox')}) %}
+        {% set attr = attr|merge({'class': attr.class|default('') ~ ' checkbox'}) %}
         {% if required %}
             {% set attr = attr|merge({'class': attr.class|default('') ~ ' required'}) %}
         {% endif %}
@@ -69,15 +69,17 @@
 {% block choice_widget %}
     {% spaceless %}
         {% if expanded %}
+            {% set attr = attr|merge({'class': attr.class|default('') ~ ' input-container'}) %}
             <div {{ block('widget_container_attributes') }}>
-                {% set extra_class = multiple ? 'checkbox' : 'radio' %}
-                {% set attr = attr|merge({'class': attr.class|default(extra_class)}) %}
-                {% for child in form %}
-                    <label{% for attrname,attrvalue in attr %} {{attrname}}="{{attrvalue}}"{% endfor %}>
-                        {{ form_widget(child) }}
-                        {{ child.get('label')|trans|raw }}
-                    </label>
-                {% endfor %}
+                <div class="input-container-inner">
+                    {% set label_class = multiple ? 'checkbox' : 'radio' %}
+                    {% for child in form %}
+                        <label class="{{ label_class }}">
+                            {{ form_widget(child) }}
+                            {{ child.get('label')|trans|raw }}
+                        </label>
+                    {% endfor %}
+                </div>
             </div>
         {% else %}
             {{ parent() }}
@@ -97,7 +99,7 @@
     {% if web_path is not null and form.parent.vars.value is not empty %}
         {% set image_src = attribute(form.parent.vars.value, web_path) %}
         {% if image_src is not null %}
-            <img src="/{{ image_src }}"/>
+            <img src="{{ asset(image_src) }}"/>
         {% endif %}
     {% endif %}
     {{ block('field_widget') }}
