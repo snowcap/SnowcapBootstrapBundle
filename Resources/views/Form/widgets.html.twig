@@ -50,7 +50,7 @@
 {% block checkbox_row %}
     {% spaceless %}
     <div class="control-group{% if errors|length > 0 %} error{% endif %} {{ form_row_classes(types) }}">
-        {% set attr = attr|merge({'class': attr.class|default('') ~ ' checkbox'}) %}
+        {% set attr = attr|merge({'class': attr.class|default('checkbox')}) %}
         {% if required %}
             {% set attr = attr|merge({'class': attr.class|default('') ~ ' required'}) %}
         {% endif %}
@@ -99,7 +99,18 @@
     {% if web_path is not null and form.parent.vars.value is not empty %}
         {% set image_src = attribute(form.parent.vars.value, web_path) %}
         {% if image_src is not null %}
-            <img src="{{ asset(image_src) }}"/>
+            <img src="/{{ image_src }}"/>
+        {% endif %}
+    {% endif %}
+    {{ block('field_widget') }}
+{% endblock %}
+
+{% block snowcap_core_video_widget %}
+    {% if video_id is not null and form.parent.vars.value is not empty %}
+    {% set video_id_value = attribute(form.parent.vars.value, video_id) %}
+        {% if provider == 'youtube' %}
+            <iframe width="420" height="315" src="http://www.youtube.com/embed/{{ video_id_value }}" frameborder="0" allowfullscreen></iframe>
+            <br/>
         {% endif %}
     {% endif %}
     {{ block('field_widget') }}
