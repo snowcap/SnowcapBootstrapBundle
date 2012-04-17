@@ -96,11 +96,8 @@
 {% endblock field_help %}
 
 {% block snowcap_core_image_widget %}
-    {% if web_path is not null and form.parent.vars.value is not empty %}
-        {% set image_src = attribute(form.parent.vars.value, web_path) %}
-        {% if image_src is not null %}
-            <img src="/{{ image_src }}"/>
-        {% endif %}
+    {% if image_src is not null %}
+        <img src="{{ asset(image_src) }}"/>
     {% endif %}
     {{ block('field_widget') }}
 {% endblock %}
