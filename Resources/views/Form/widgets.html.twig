@@ -97,7 +97,7 @@
 
 {% block snowcap_core_image_widget %}
     {% if image_src is not null %}
-        <img src="{{ asset(image_src) }}"/>
+        <img src="{{ asset(image_src) }}"/><br/>
     {% endif %}
     {{ block('field_widget') }}
 {% endblock %}
