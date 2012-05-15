@@ -55,15 +55,19 @@
             {% set attr = attr|merge({'class': attr.class|default('') ~ ' required'}) %}
         {% endif %}
         <div class="controls">
-            <label{% for attrname,attrvalue in attr %} {{attrname}}="{{attrvalue}}"{% endfor %}>
-                {{ form_widget(form) }}
-                {{ label|trans|raw }}
-            </label>
+            {{ form_label(form, label|default(null)) }}
             {{ block('field_help') }}
             {{ form_errors(form) }}
         </div>
     </div>
     {% endspaceless %}
+{% endblock %}
+
+{% block checkbox_label %}
+    <label class="checkbox">
+        {{ form_widget(form) }}
+        {{ label|trans|raw }}
+    </label>
 {% endblock %}
 
 {% block choice_widget %}
