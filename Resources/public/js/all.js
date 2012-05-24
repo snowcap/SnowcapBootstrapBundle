@@ -27,4 +27,8 @@ jQuery(document).ready(function ($) {
 
         modal.modal('show');
     });
+
+    // Tooltips
+    $("*[rel=tooltip]").tooltip().css({'cursor':'pointer'});
+
 });
