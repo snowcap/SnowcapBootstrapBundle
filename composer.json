@@ -1,5 +1,5 @@
 {
-    "name": "snowcap/bootsrap-bundle",
+    "name": "snowcap/bootstrap-bundle",
     "type": "symfony-bundle",
     "description": "Symfony SnowcapBootstrapBundle",
     "keywords": ["twitter bootstrap"],
