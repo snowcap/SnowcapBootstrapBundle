@@ -6,7 +6,7 @@
     {% if title|default('') is not empty %}
         <h4 class="alert-heading">{{ title }}</h4>
     {% endif %}
-    {{ text }}
+    {{ text | raw }}
 </div>
 {% endmacro %}
 
