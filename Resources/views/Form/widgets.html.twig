@@ -103,7 +103,13 @@
     {% if image_src is not null %}
         <img src="{{ asset(image_src) }}"/><br/>
     {% endif %}
-    {{ block('field_widget') }}
+    {{ form_widget(form.file) }}
+    {% if image_src is not null %}
+        <label class="checkbox">
+            {{ form_widget(form.delete) }}
+            {{ form.delete.vars['label']|trans|raw }}
+        </label>
+    {% endif %}
 {% endblock %}
 
 {% block snowcap_core_video_widget %}
