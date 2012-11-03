@@ -3,7 +3,7 @@
 {% block field_row %}
 {% if attr is not defined %}{% set attr = {} %}{% endif %}
 {% spaceless %}
-<div class="control-group{% if errors|length > 0 %} error{% endif %} {{ form_row_classes(types) }}">
+<div class="control-group{% if errors|length > 0 %} error{% endif %}">
     {{ form_label(form, null, {'attr': {'class': 'control-label'}}) }}
     <div class="controls">
         {{ form_widget(form, {'attr': attr}) }}
@@ -100,11 +100,11 @@
 {% endblock field_help %}
 
 {% block snowcap_core_image_widget %}
-    {% if image_src is not null %}
-        <img src="{{ asset(image_src) }}"/><br/>
+    {% if file_url is not null %}
+        <img src="{{ asset(file_url) }}"/><br/>
     {% endif %}
     {{ form_widget(form.file) }}
-    {% if image_src is not null %}
+    {% if file_url is not null %}
         <label class="checkbox">
             {{ form_widget(form.delete) }}
             {{ form.delete.vars['label']|trans|raw }}
