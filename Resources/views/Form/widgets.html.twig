@@ -107,7 +107,7 @@
     {% if file_url is not null %}
         <label class="checkbox">
             {{ form_widget(form.delete) }}
-            {{ form.delete.vars['label']|trans|raw }}
+            {{ form.delete.vars['label']|trans({}, translation_domain) }}
         </label>
     {% endif %}
 {% endblock %}
