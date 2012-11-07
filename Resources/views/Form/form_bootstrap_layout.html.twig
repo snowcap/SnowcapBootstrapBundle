@@ -136,7 +136,7 @@
 
 {% block snowcap_core_file_widget %}
     {% if file_url is not null %}
-        <a class="btn" href="{{ asset(file_url) }}">{{ download_label }}</a>
+        <a class="btn" href="{{ asset(file_url) }}">{{ download_label|trans({}, translation_domain) }}</a>
     {% endif %}
     {{ form_widget(form.file) }}
     {% if file_url is not null %}
