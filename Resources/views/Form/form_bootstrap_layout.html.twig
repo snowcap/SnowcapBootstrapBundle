@@ -1,6 +1,6 @@
 {% extends 'form_div_layout.html.twig' %}
 
-{% block field_row %}
+{% block form_row %}
 {% if attr is not defined %}{% set attr = {} %}{% endif %}
 {% spaceless %}
 <div class="control-group{% if errors|length > 0 %} error{% endif %}">
@@ -12,7 +12,7 @@
     </div>
 </div>
 {% endspaceless %}
-{% endblock field_row %}
+{% endblock form_row %}
 
 {% block repeated_row %}
     {% spaceless %}
@@ -28,7 +28,16 @@
     {% endspaceless %}
 {% endblock repeated_row %}
 
-{% block field_errors %}
+{% block collection_widget %}
+    <div class="collection-container" style="overflow: auto">
+        {{ parent() }}
+        {% if allow_add %}
+            <p><a href="#" class="btn btn-primary add-element">{{ add_label|trans({}, translation_domain) }}</a></p>
+        {% endif %}
+    </div>
+{% endblock collection_widget %}
+
+{% block form_errors %}
     {% spaceless %}
         {% if errors|length > 0 %}
             {% for error in errors %}
@@ -36,7 +45,7 @@
             {% endfor %}
         {% endif %}
     {% endspaceless %}
-{% endblock field_errors %}
+{% endblock form_errors %}
 
 {% block email_widget %}
     {% spaceless %}
@@ -49,25 +58,21 @@
 
 {% block checkbox_row %}
     {% spaceless %}
-    <div class="control-group{% if errors|length > 0 %} error{% endif %} {{ form_row_classes(types) }}">
+    <div class="control-group{% if errors|length > 0 %} error{% endif %}">
         {% set attr = attr|merge({'class': attr.class|default('') ~ ' checkbox' }) %}
         {% if required %}
             {% set attr = attr|merge({'class': attr.class|default('') ~ ' required'}) %}
         {% endif %}
         <div class="controls">
-            {{ form_label(form, label|default(null)) }}
+            <label class="checkbox">
+                {{ form_widget(form) }}
+                {{ label|trans }}
+            </label>
             {{ block('field_help') }}
             {{ form_errors(form) }}
         </div>
     </div>
     {% endspaceless %}
-{% endblock %}
-
-{% block checkbox_label %}
-    <label class="checkbox">
-        {{ form_widget(form) }}
-        {{ label|trans|raw }}
-    </label>
 {% endblock %}
 
 {% block choice_widget %}
