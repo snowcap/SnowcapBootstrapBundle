@@ -1,10 +1,10 @@
 {% extends 'form_div_layout.html.twig' %}
 
 {% block form_row %}
-{% if attr is not defined %}{% set attr = {} %}{% endif %}
 {% spaceless %}
 <div class="control-group{% if errors|length > 0 %} error{% endif %}">
-    {{ form_label(form, null, {'attr': {'class': 'control-label'}}) }}
+    {% set label_attr = label_attr|merge({'class': ((label_attr.class|default('')) ~ ' control-label')|trim}) %}
+    {{ block('form_label') }}
     <div class="controls">
         {{ form_widget(form, {'attr': attr}) }}
         {{ block('field_help') }}
@@ -41,7 +41,13 @@
     {% spaceless %}
         {% if errors|length > 0 %}
             {% for error in errors %}
-                <p class="help-block">{{ error.messageTemplate|trans(error.messageParameters, 'validators') }}</p>
+                <p class="help-block">
+                    {{
+                        error.messagePluralization is null
+                            ? error.messageTemplate|trans(error.messageParameters, 'validators')
+                            : error.messageTemplate|transchoice(error.messagePluralization, error.messageParameters, 'validators')
+                    }}
+                </p>
             {% endfor %}
         {% endif %}
     {% endspaceless %}
@@ -59,14 +65,14 @@
 {% block checkbox_row %}
     {% spaceless %}
     <div class="control-group{% if errors|length > 0 %} error{% endif %}">
-        {% set attr = attr|merge({'class': attr.class|default('') ~ ' checkbox' }) %}
-        {% if required %}
-            {% set attr = attr|merge({'class': attr.class|default('') ~ ' required'}) %}
-        {% endif %}
+        {% set label_attr = label_attr|merge({'class': ((label_attr.class|default('')) ~ ' checkbox')|trim}) %}
         <div class="controls">
-            <label class="checkbox">
+            <label{% for attrname, attrvalue in label_attr %} {{ attrname }}="{{ attrvalue }}"{% endfor %}>
                 {{ form_widget(form) }}
-                {{ label|trans }}
+                {% if label is empty %}
+                    {% set label = name|humanize %}
+                {% endif %}
+                {{ label|trans({}, translation_domain) }}
             </label>
             {{ block('field_help') }}
             {{ form_errors(form) }}
@@ -78,14 +84,14 @@
 {% block choice_widget %}
     {% spaceless %}
         {% if expanded %}
-            {% set attr = attr|merge({'class': attr.class|default('') ~ ' input-container'}) %}
+            {% set attr = attr|merge({'class': ((attr.class|default('')) ~ ' input-container')|trim}) %}
             <div {{ block('widget_container_attributes') }}>
                 <div class="input-container-inner">
                     {% set label_class = multiple ? 'checkbox' : 'radio' %}
                     {% for child in form %}
                         <label class="{{ label_class }}">
                             {{ form_widget(child) }}
-                            {{ child.get('label')|trans|raw }}
+                            {{ child.vars['label']|trans({}, translation_domain) }}
                         </label>
                     {% endfor %}
                 </div>
@@ -129,11 +135,14 @@
 {% endblock %}
 
 {% block snowcap_core_file_widget %}
-    {{ block('field_widget') }}
-    {% if web_path is not null and form.parent.vars.value is not empty %}
-        {% set url = attribute(form.parent.vars.value, web_path) %}
-        {% if url is not null %}
-            <a class="btn" href="/{{ url }}">Download file</a>
-        {% endif %}
+    {% if file_url is not null %}
+        <a class="btn" href="{{ asset(file_url) }}">{{ download_label }}</a>
+    {% endif %}
+    {{ form_widget(form.file) }}
+    {% if file_url is not null %}
+        <label class="checkbox">
+            {{ form_widget(form.delete) }}
+            {{ form.delete.vars['label']|trans({}, translation_domain) }}
+        </label>
     {% endif %}
 {% endblock %}
