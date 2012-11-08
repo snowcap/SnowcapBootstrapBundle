@@ -57,7 +57,7 @@
     {% spaceless %}
         {% set type = type|default('email') %}
         <div class="input-prepend">
-            <span class="add-on">@</span>{{ block('field_widget') }}
+            <span class="add-on"><i class="icon-envelope"></i></span>{{ block('field_widget') }}
         </div>
     {% endspaceless %}
 {% endblock email_widget %}
