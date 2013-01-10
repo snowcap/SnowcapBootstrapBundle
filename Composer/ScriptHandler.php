@@ -10,10 +10,9 @@ class ScriptHandler
     public static function symlinkBootstrap($event)
     {
         $appDir = 'app';
-        $event->getIO()->write("START");
 
         if (!is_dir($appDir)) {
-            $event->getIO()->write("PROBLEM");
+            $event->getIO()->write(sprintf('Cannot find "%s" app directory'));
 
             return;
         }
