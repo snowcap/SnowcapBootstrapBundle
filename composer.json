@@ -28,7 +28,7 @@
         "symfony/symfony": "2.1.*",
         "symfony/framework-bundle": "2.1.*",
         "twitter/bootstrap": "v2.2.2",
-        "leafo/lessphp": "dev-master"
+        "leafo/lessphp": "v0.3.8"
     },
     "scripts": {
         "post-install-cmd": [
