@@ -7,7 +7,7 @@ use Symfony\Component\Process\PhpExecutableFinder;
 
 class ScriptHandler
 {
-    public static function postInstallSymlinkTwitterBootstrap($event)
+    public static function symlinkBootstrap($event)
     {
         $appDir = 'app';
 
