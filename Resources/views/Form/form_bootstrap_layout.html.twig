@@ -3,7 +3,6 @@
 {% block form_row %}
 {% spaceless %}
 <div class="control-group{% if errors|length > 0 %} error{% endif %}">
-    {% set label_attr = label_attr|merge({'class': ((label_attr.class|default('')) ~ ' control-label')|trim}) %}
     {{ form_label(form, null, label_attr) }}
     <div class="controls">
         {{ form_widget(form, {'attr': attr}) }}
@@ -28,11 +27,16 @@
     {% endspaceless %}
 {% endblock repeated_row %}
 
+{% block form_label %}
+    {% set label_attr = label_attr|merge({'class': ((label_attr.class|default('')) ~ ' control-label')|trim}) %}
+    {{ parent() }}
+{% endblock form_label %}
+
 {% block collection_widget %}
     <div class="collection-container" style="overflow: auto">
         {{ parent() }}
         {% if allow_add %}
-            <p><a href="#" class="btn btn-primary add-element">{{ add_label|trans({}, translation_domain) }}</a></p>
+            <p><a href="#" class="btn add-element"><i class="icon-plus-sign"></i> {{ add_label|trans({}, translation_domain) }}</a></p>
         {% endif %}
     </div>
 {% endblock collection_widget %}
