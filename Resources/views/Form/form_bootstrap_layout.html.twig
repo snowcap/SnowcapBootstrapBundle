@@ -2,14 +2,19 @@
 
 {% block form_row %}
 {% spaceless %}
-<div class="control-group{% if errors|length > 0 %} error{% endif %}">
-    {{ form_label(form, null, label_attr) }}
-    <div class="controls">
-        {{ form_widget(form, {'attr': attr}) }}
-        {{ block('field_help') }}
-        {{ form_errors(form) }}
+    {% set row_attr = row_attr|default({}) %}
+    {% set row_attr = row_attr|merge({'class': (row_attr.class|default('') ~ ' control-group')|trim }) %}
+    {% if errors|length > 0 %}
+        {% set row_attr = row_attr|merge({'class': (row_attr.class|default('') ~ ' error')|trim }) %}
+    {% endif %}
+    <div{% for attrname, attrvalue in row_attr %} {{ attrname }}="{{ attrvalue }}"{% endfor %}>
+        {{ form_label(form, null, label_attr) }}
+        <div class="controls">
+            {{ form_widget(form, {'attr': attr}) }}
+            {{ block('field_help') }}
+            {{ form_errors(form) }}
+        </div>
     </div>
-</div>
 {% endspaceless %}
 {% endblock form_row %}
 
