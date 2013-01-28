@@ -38,7 +38,7 @@
 {% endblock form_label %}
 
 {% block collection_widget %}
-    <div class="collection-container" style="overflow: auto">
+    <div class="collection-container control-group" style="overflow: auto">
         {{ parent() }}
         {% if allow_add %}
             <p><a href="#" class="btn add-element"><i class="icon-plus-sign"></i> {{ add_label|trans({}, translation_domain) }}</a></p>
