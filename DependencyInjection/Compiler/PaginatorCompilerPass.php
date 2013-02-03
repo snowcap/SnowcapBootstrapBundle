@@ -20,6 +20,6 @@ class PaginatorCompilerPass implements CompilerPassInterface {
         }
 
         $definition = $container->getDefinition('snowcap_core.twig_paginator');
-        $definition->addMethodCall('addTemplatePath', array(__DIR__ . '/../../Resources/views/Paginator'));
+        $definition->addMethodCall('setTemplate', array('SnowcapBootstrapBundle:Paginator:paginator.html.twig'));
     }
 }
