@@ -147,6 +147,7 @@
 
 {% block snowcap_core_file_widget %}
     {{ form_widget(form.file) }}
+    {{ form_errors(form.file) }}
     {% if file_url is not null %}
         <p>
             <a class="btn" href="{{ asset(file_url) }}" target="_blank">
