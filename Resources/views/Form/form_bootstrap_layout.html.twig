@@ -146,12 +146,14 @@
 {% endblock %}
 
 {% block snowcap_core_file_widget %}
-    {% if file_url is not null %}
-        <a class="btn" href="{{ asset(file_url) }}">
-            {{ download_label is not null ? download_label|trans({}, translation_domain) : 'Download' }}
-        </a>
-    {% endif %}
     {{ form_widget(form.file) }}
+    {% if file_url is not null %}
+        <p>
+            <a class="btn" href="{{ asset(file_url) }}" target="_blank">
+                {{ download_label is not null ? download_label|trans({}, translation_domain) : 'Download current file' }}
+            </a>
+        </p>
+    {% endif %}
     {% if file_url is not null and allow_delete %}
         <label class="checkbox">
             {{ form_widget(form.delete) }}
