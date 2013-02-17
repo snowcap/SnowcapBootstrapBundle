@@ -1,0 +1,5 @@
+services:
+    snowcap_bootstrap.type_extension_help:
+        class: Snowcap\BootstrapBundle\Form\Extension\HelpTypeExtension
+        tags:
+            - { name: form.type_extension, alias: form }

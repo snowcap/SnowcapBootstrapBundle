@@ -41,7 +41,11 @@
     <div class="collection-container control-group" style="overflow: auto">
         {{ parent() }}
         {% if allow_add %}
-            <p><a href="#" class="btn add-element"><i class="icon-plus-sign"></i> {{ add_label|trans({}, translation_domain) }}</a></p>
+            <p>
+                <a href="#" class="btn add-element">
+                    <i class="icon-plus-sign"></i> {{ add_label is not null ? add_label|trans({}, translation_domain) : 'Add' }}
+                </a>
+            </p>
         {% endif %}
     </div>
 {% endblock collection_widget %}
@@ -113,9 +117,9 @@
 
 {% block field_help %}
     {% if help_block is defined %}
-        <p class="help-block">{{ help_block }}</p>
+        <p class="help-block">{{ help_block|trans({}, translation_domain)|raw }}</p>
     {% elseif help_inline is defined %}
-        <span class="help-inline">{{ help_inline }}</span>
+        <span class="help-inline">{{ help_inline|trans({}, translation_domain)|raw }}</span>
     {% endif %}
 {% endblock field_help %}
 
@@ -124,34 +128,32 @@
         <img src="{{ asset(file_url) }}"/><br/>
     {% endif %}
     {{ form_widget(form.file) }}
-    {% if file_url is not null %}
+    {% if file_url is not null and allow_delete %}
         <label class="checkbox">
             {{ form_widget(form.delete) }}
-            {{ form.delete.vars['label']|trans({}, translation_domain) }}
+            {{ delete_label is not null ? delete_label|trans({}, translation_domain) : 'Delete' }}
         </label>
     {% endif %}
 {% endblock %}
 
 {% block snowcap_core_video_widget %}
-    {% if video_id is not null and form.parent.vars.value is not empty %}
-    {% set video_id_value = attribute(form.parent.vars.value, video_id) %}
-        {% if provider == 'youtube' %}
-            <iframe width="420" height="315" src="http://www.youtube.com/embed/{{ video_id_value }}" frameborder="0" allowfullscreen></iframe>
-            <br/>
-        {% endif %}
+    {{ block('field_widget') }}<br/>
+    {% if provider == 'youtube' %}
+        <iframe width="420" height="315" src="http://www.youtube.com/embed/{{ value }}" frameborder="0" allowfullscreen></iframe>
     {% endif %}
-    {{ block('field_widget') }}
 {% endblock %}
 
 {% block snowcap_core_file_widget %}
     {% if file_url is not null %}
-        <a class="btn" href="{{ asset(file_url) }}">{{ download_label|trans({}, translation_domain) }}</a>
+        <a class="btn" href="{{ asset(file_url) }}">
+            {{ download_label is not null ? download_label|trans({}, translation_domain) : 'Download' }}
+        </a>
     {% endif %}
     {{ form_widget(form.file) }}
-    {% if file_url is not null %}
+    {% if file_url is not null and allow_delete %}
         <label class="checkbox">
             {{ form_widget(form.delete) }}
-            {{ form.delete.vars['label']|trans({}, translation_domain) }}
+            {{ delete_label is not null ? delete_label|trans({}, translation_domain) : 'Delete' }}
         </label>
     {% endif %}
 {% endblock %}
