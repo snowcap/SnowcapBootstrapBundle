@@ -66,13 +66,42 @@
     {% endspaceless %}
 {% endblock form_errors %}
 
-{% block email_widget %}
-    {% spaceless %}
-        {% set type = type|default('email') %}
-        <div class="input-prepend">
-            <span class="add-on"><i class="icon-envelope"></i></span>{{ block('field_widget') }}
+{% block form_widget_simple %}
+{% spaceless %}
+    {% set type = type|default('text') %}
+    {% set input %}
+        <input type="{{ type }}" {{ block('widget_attributes') }} {% if value is not empty %}value="{{ value }}" {% endif %}/>
+    {% endset %}
+    {% if prepend or append %}
+        {% set prependappend_class = ((prepend ? "input-prepend " : "") ~ (append ? "input-append " : ""))|trim %}
+        <div class="{{ prependappend_class }}">
+            {% if prepend %}
+                <span class="add-on">
+                    {% if prepend_icon is defined %}<i class="icon-{{ prepend_icon }}"></i> {% endif %}
+                    {% if prepend_text is defined %}{{ prepend_text }}{% endif %}
+                </span>
+            {% endif %}
+            {{ input }}
+            {% if append %}
+                <span class="add-on">
+                    {% if append_icon is defined %}<i class="icon-{{ append_icon }}"></i> {% endif %}
+                    {% if append_text is defined %}{{ append_text }}{% endif %}
+                </span>
+            {% endif %}
         </div>
-    {% endspaceless %}
+    {% else %}
+        {{ input }}
+    {% endif %}
+{% endspaceless %}
+{% endblock form_widget_simple %}
+
+{% block email_widget %}
+{% spaceless %}
+    {% set type = type|default('email') %}
+    <div class="input-prepend">
+        <span class="add-on"><i class="icon-envelope"></i></span>{{ block('field_widget') }}
+    </div>
+{% endspaceless %}
 {% endblock email_widget %}
 
 {% block checkbox_row %}
@@ -95,24 +124,24 @@
 {% endblock %}
 
 {% block choice_widget %}
-    {% spaceless %}
-        {% if expanded %}
-            {% set attr = attr|merge({'class': ((attr.class|default('')) ~ ' input-container')|trim}) %}
-            <div {{ block('widget_container_attributes') }}>
-                <div class="input-container-inner">
-                    {% set label_class = multiple ? 'checkbox' : 'radio' %}
-                    {% for child in form %}
-                        <label class="{{ label_class }}">
-                            {{ form_widget(child) }}
-                            {{ child.vars['label']|trans({}, translation_domain) }}
-                        </label>
-                    {% endfor %}
-                </div>
+{% spaceless %}
+    {% if expanded %}
+        {% set attr = attr|merge({'class': ((attr.class|default('')) ~ ' input-container')|trim}) %}
+        <div {{ block('widget_container_attributes') }}>
+            <div class="input-container-inner">
+                {% set label_class = multiple ? 'checkbox' : 'radio' %}
+                {% for child in form %}
+                    <label class="{{ label_class }}">
+                        {{ form_widget(child) }}
+                        {{ child.vars['label']|trans({}, translation_domain) }}
+                    </label>
+                {% endfor %}
             </div>
-        {% else %}
-            {{ parent() }}
-        {% endif %}
-    {% endspaceless %}
+        </div>
+    {% else %}
+        {{ parent() }}
+    {% endif %}
+{% endspaceless %}
 {% endblock choice_widget %}
 
 {% block field_help %}

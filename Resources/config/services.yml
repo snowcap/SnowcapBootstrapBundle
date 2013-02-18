@@ -3,3 +3,8 @@ services:
         class: Snowcap\BootstrapBundle\Form\Extension\HelpTypeExtension
         tags:
             - { name: form.type_extension, alias: form }
+
+    snowcap_bootstrap.type_extension_prepend_append:
+        class: Snowcap\BootstrapBundle\Form\Extension\PrependAndAppendTypeExtension
+        tags:
+            - { name: form.type_extension, alias: form }
