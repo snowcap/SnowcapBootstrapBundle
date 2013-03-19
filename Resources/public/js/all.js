@@ -1,6 +1,8 @@
 jQuery(document).ready(function ($) {
+    //TODO: cleanup - what follows below has been superseded by the snowcap-bootstrap.js file
+
     // Modal
-    $('#modal').modal({show:false}); //TODO: create modals on demand
+    $('#modal').modal({show:false});
     $('#modal').on('hidden', function (event) {
         $(this).empty();
     });
@@ -30,5 +32,4 @@ jQuery(document).ready(function ($) {
 
     // Tooltips
     $("*[rel=tooltip]").tooltip().css({'cursor':'pointer'});
-
 });
