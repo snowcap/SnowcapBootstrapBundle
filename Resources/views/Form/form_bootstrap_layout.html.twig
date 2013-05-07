@@ -168,7 +168,7 @@
 {% block snowcap_core_video_widget %}
     {{ block('field_widget') }}<br/>
     {%  if value is not empty %}
-        {% if provider == 'youtube' %}
+        {% if provider is defined and provider == 'youtube' %}
             <iframe width="420" height="315" src="http://www.youtube.com/embed/{{ value }}" frameborder="0" allowfullscreen></iframe>
         {% elseif provider == 'tudou' %}
             <embed src="http://www.tudou.com/v/{{ value }}/&resourceId=0_05_05_99&bid=05/v.swf" type="application/x-shockwave-flash" allowscriptaccess="always" allowfullscreen="true" wmode="opaque" width="420" height="315"></embed>
