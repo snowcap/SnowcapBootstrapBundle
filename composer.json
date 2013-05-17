@@ -26,16 +26,11 @@
     "minimum-stability": "dev",
     "require": {
         "php": ">=5.3.2",
-        "symfony/framework-bundle": ">=2.2",
+        "symfony/framework-bundle": ">=2.2,<2.3",
         "leafo/lessphp": "v0.3.8"
     },
     "autoload": {
         "psr-0": { "Snowcap\\BootstrapBundle": "" }
     },
-    "target-dir": "Snowcap/BootstrapBundle",
-    "extra": {
-        "branch-alias": {
-            "dev-master": "2.2.x-dev"
-        }
-    }
+    "target-dir": "Snowcap/BootstrapBundle"
 }
