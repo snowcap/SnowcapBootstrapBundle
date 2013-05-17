@@ -99,7 +99,7 @@
 {% spaceless %}
     {% set type = type|default('email') %}
     <div class="input-prepend">
-        <span class="add-on"><i class="icon-envelope"></i></span>{{ block('field_widget') }}
+        <span class="add-on"><i class="icon-envelope"></i></span>{{ block('form_widget') }}
     </div>
 {% endspaceless %}
 {% endblock email_widget %}
@@ -166,7 +166,7 @@
 {% endblock %}
 
 {% block snowcap_core_video_widget %}
-    {{ block('field_widget') }}<br/>
+    {{ block('form_widget') }}<br/>
     {%  if value is not empty %}
         {% if provider is defined and provider == 'youtube' %}
             <iframe width="420" height="315" src="http://www.youtube.com/embed/{{ value }}" frameborder="0" allowfullscreen></iframe>
@@ -177,7 +177,7 @@
 {% endblock %}
 
 {% block snowcap_core_sound_widget %}
-    {{ block('field_widget') }}<br/>
+    {{ block('form_widget') }}<br/>
     {%  if value is not empty %}
         {% if provider == 'soundcloud' %}
             <iframe width="420" height="166" scrolling="no" frameborder="no" src="https://w.soundcloud.com/player/?url=http%3A%2F%2Fapi.soundcloud.com%2Ftracks%2F{{ value }}"></iframe>
