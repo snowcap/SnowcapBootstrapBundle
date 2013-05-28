@@ -1,4 +1,4 @@
-(function($) {
+var SnowcapBootstrap = (function() {
     /**
      * Modal class
      *
@@ -6,39 +6,61 @@
     var Modal = Backbone.View.extend({
         tagName: 'div',
         className: 'modal hide fade',
-        events: {
-            'click button[data-admin=modal-cancel]': function(event) {
-                this.$el.modal('hide');
-            },
-            'hidden': function() {
-                this.$el.empty();
-            }
+        events: function() {
+            return {
+                'click button[data-admin=modal-cancel]': function(event) {
+                    this.$el.modal('hide');
+                },
+                'hidden': function() {
+                    this.$el.empty();
+                }
+            };
         },
         initialize: function() {
-            this.$trigger = $(this.options.trigger);
+            if(this.options.modalClass) {
+                this.$el.addClass(this.options.modalClass);
+            }
             this.$el.modal({show: false});
             this.render();
         },
         render: function() {
             var doneCallback = _.bind(function(data) {
-                this.$el.html(data);
+                this.$el.html(data.content);
+                this.$el.find('.modal-body').css('maxHeight', $(window).height() * 0.6);
                 $('body').append(this.$el);
                 this.$el.modal('show');
             }, this);
-            $.get(this.$trigger.attr('href'))
+            $.get(this.options.url)
                 .done(doneCallback);
+        },
+        close: function() {
+            this.$el.modal('hide');
+            this.remove();
         }
     });
 
+    return {
+        'Modal': Modal
+    }
+})();
+
+(function($) {
     /**
      * Observe datalist triggers and create datalist
      * instances on click
      *
      */
     $('[data-bootstrap=modal]').each(function(offset, modalTrigger) {
-        $(modalTrigger).on('click', function(event) {
+        var $modalTrigger = $(modalTrigger);
+        $($modalTrigger).on('click', function(event) {
             event.preventDefault();
-            new Modal({'trigger': modalTrigger});
+            var options = {
+                url: $modalTrigger.attr('href')
+            };
+            if($modalTrigger.data('options-modal-class')) {
+                options.modalClass = $modalTrigger.data('options-modal-class');
+            }
+            new SnowcapBootstrap.Modal(options);
         });
     });
 })(jQuery);
