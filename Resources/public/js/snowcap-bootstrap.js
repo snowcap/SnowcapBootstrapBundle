@@ -8,9 +8,6 @@ var SnowcapBootstrap = (function() {
         className: 'modal hide fade',
         events: function() {
             return {
-                'click button[data-admin=modal-cancel]': function(event) {
-                    this.$el.modal('hide');
-                },
                 'hidden': function() {
                     this.$el.empty();
                 }
