@@ -26,6 +26,7 @@ var SnowcapBootstrap = (function() {
                 this.$el.find('.modal-body').css('maxHeight', $(window).height() * 0.6);
                 $('body').append(this.$el);
                 this.$el.modal('show');
+                this.$('*[data-prototype]').collectionForm(); //TODO: adapt when core use backbone too
             }, this);
             $.get(this.options.url)
                 .done(doneCallback);
