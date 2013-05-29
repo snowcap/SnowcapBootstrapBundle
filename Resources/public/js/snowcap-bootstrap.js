@@ -18,6 +18,7 @@ var SnowcapBootstrap = (function() {
                 this.$el.addClass(this.options.modalClass);
             }
             this.$el.modal({show: false});
+            this.on('modal:post_render', _.bind(this.postRender, this));
             this.render();
         },
         render: function() {
@@ -26,10 +27,13 @@ var SnowcapBootstrap = (function() {
                 this.$el.find('.modal-body').css('maxHeight', $(window).height() * 0.6);
                 $('body').append(this.$el);
                 this.$el.modal('show');
-                this.$('*[data-prototype]').collectionForm(); //TODO: adapt when core use backbone too
+                this.trigger('modal:post_render');
             }, this);
             $.get(this.options.url)
                 .done(doneCallback);
+        },
+        postRender: function() {
+            this.$('*[data-prototype]').collectionForm(); //TODO: adapt when core use backbone too
         },
         close: function() {
             this.$el.modal('hide');
