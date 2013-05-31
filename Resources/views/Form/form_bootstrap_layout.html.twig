@@ -38,12 +38,14 @@
 {% endblock form_label %}
 
 {% block collection_widget %}
-    {% set attr = attr|merge({'data-core': 'form-collection' }) %}
-    <div class="collection-container control-group" style="overflow: auto">
+    {% set container_data_attr = container_data_attr|default('data-core="form-collection-container"') %}
+    {% set add_data_attr = add_data_attr|default('data-core="form-collection-add"') %}
+
+    <div class="collection-container control-group" {{ container_data_attr|raw }} style="overflow: auto">
         {{ parent() }}
         {% if allow_add %}
             <p>
-                <a href="#" class="btn" data-core="form-collection-add">
+                <a href="#" class="btn" {{ add_data_attr|raw }}>
                     <i class="icon-plus-sign"></i> {{ add_label is not null ? add_label|trans({}, translation_domain) : 'Add' }}
                 </a>
             </p>
