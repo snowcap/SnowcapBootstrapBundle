@@ -1,6 +1,6 @@
 var SnowcapBootstrap = (function() {
     /**
-     * Modal class
+     * Modal view
      *
      */
     var Modal = Backbone.View.extend({
@@ -8,61 +8,142 @@ var SnowcapBootstrap = (function() {
         className: 'modal hide fade',
         events: function() {
             return {
+                'submit form': 'submit',
+                'click a': 'clickLink',
+                'click [data-bootstrap=modal-confirm]': 'confirm',
                 'hidden': function() {
                     this.$el.empty();
                 }
             };
         },
+        /**
+         * Initialize
+         *
+         */
         initialize: function() {
             if(this.options.modalClass) {
                 this.$el.addClass(this.options.modalClass);
             }
             this.$el.modal({show: false});
-            this.on('modal:post_render', _.bind(this.postRender, this));
+            this.on('modal:render', SnowcapCore.Form.collectionFactory);
+
             this.render();
         },
-        render: function() {
-            var doneCallback = _.bind(function(data) {
-                this.$el.html(data.content);
-                this.$el.find('.modal-body').css('maxHeight', $(window).height() * 0.6);
-                $('body').append(this.$el);
-                this.$el.modal('show');
-                this.trigger('modal:post_render');
-            }, this);
-            $.get(this.options.url)
-                .done(doneCallback);
+        /**
+         * Called when a confirm button (data-bootstrap=modal-confirm) is clicked
+         *
+         * @param event
+         */
+        confirm: function(event) {
+            event.preventDefault();
+            this.close();
+            this.trigger('modal:confirm');
         },
-        postRender: function() {
-            this.$('*[data-prototype]').collectionForm(); //TODO: adapt when core use backbone too
+        /**
+         * Called when a modal within the form is submitted
+         *
+         * @param event
+         */
+        submit: function(event) {
+            event.preventDefault();
+            var $form = this.$el.find('form');
+            $.post($form.attr('action'), $form.serialize(), null, "json")
+                .done(_.bind(this.done, this))
+                .fail(_.bind(this.fail, this));
         },
+        /**
+         * Called on submit success
+         *
+         * @param data
+         */
+        done: function(data) {
+            this.close();
+            this.trigger('modal:success', data.result);
+        },
+        /**
+         * Called on submit "failure" (30x, 40x, 50x)
+         *
+         * @param jqXHR
+         * @param textStatus
+         */
+        fail: function(jqXHR, textStatus) {
+            switch(jqXHR.status) {
+                case 301: // REDIRECTION
+                    var response = JSON.parse(jqXHR.responseText);
+                    window.location.href = response.redirect_url;
+                    break;
+                default:
+                    console.log(jqXHR);
+                    console.log(textStatus);
+                    break;
+            }
+        },
+        /**
+         * Update modal content with response provided by a link
+         *
+         * @param event
+         */
+        clickLink: function(event) {
+            event.preventDefault();
+            var $link = $(event.currentTarget);
+            $.getJSON($link.attr('href'))
+                .done(_.bind(function(data) {
+                    this.$el.html(data.content);
+                }, this));
+        },
+        /**
+         * Close the modal
+         *
+         */
         close: function() {
             this.$el.modal('hide');
             this.remove();
+        },
+        /**
+         * Render
+         *
+         */
+        render: function() {
+            $.get(this.options.url)
+                .done(_.bind(function(data) {
+                    this.$el.html(data.content);
+                    this.$el.find('.modal-body').css('maxHeight', $(window).height() * 0.6);
+                    $('body').append(this.$el);
+                    this.$el.modal('show');
+                    this.trigger('modal:render');
+                }, this));
         }
     });
 
+    /**
+     * Modal factory function
+     *
+     * @param $context
+     */
+    var modalFactory = function($context) {
+        $context.find('[data-bootstrap=modal]').each(function(offset, modalTrigger) {
+            var $modalTrigger = $(modalTrigger);
+            $($modalTrigger).on('click', function(event) {
+                event.preventDefault();
+                var options = {
+                    url: $modalTrigger.attr('href')
+                };
+                if($modalTrigger.data('options-modal-class')) {
+                    options.modalClass = $modalTrigger.data('options-modal-class');
+                }
+                new SnowcapBootstrap.Modal(options);
+            });
+        });
+    };
+
     return {
-        'Modal': Modal
+        Modal: Modal,
+        modalFactory: modalFactory
     }
 })();
 
 (function($) {
-    /**
-     * Observe datalist triggers and create datalist
-     * instances on click
-     *
-     */
-    $('[data-bootstrap=modal]').each(function(offset, modalTrigger) {
-        var $modalTrigger = $(modalTrigger);
-        $($modalTrigger).on('click', function(event) {
-            event.preventDefault();
-            var options = {
-                url: $modalTrigger.attr('href')
-            };
-            if($modalTrigger.data('options-modal-class')) {
-                options.modalClass = $modalTrigger.data('options-modal-class');
-            }
-            new SnowcapBootstrap.Modal(options);
-        });
-    });
+
+    SnowcapBootstrap.modalFactory($('body'));
+
 })(jQuery);
