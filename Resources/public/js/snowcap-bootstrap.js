@@ -120,7 +120,8 @@ var SnowcapBootstrap = (function() {
      *
      * @param $context
      */
-    var modalFactory = function($context) {
+    var modalFactory = function() {
+        var $context = (0 === arguments.length) ? $('body') : arguments[0];
         $context.find('[data-bootstrap=modal]').each(function(offset, modalTrigger) {
             var $modalTrigger = $(modalTrigger);
             $($modalTrigger).on('click', function(event) {
@@ -144,6 +145,6 @@ var SnowcapBootstrap = (function() {
 
 (function($) {
 
-    SnowcapBootstrap.modalFactory($('body'));
+    SnowcapBootstrap.modalFactory();
 
 })(jQuery);
