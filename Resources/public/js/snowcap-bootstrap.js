@@ -24,7 +24,12 @@ var SnowcapBootstrap = (function() {
             if(this.options.modalClass) {
                 this.$el.addClass(this.options.modalClass);
             }
-            this.$el.modal({show: false});
+
+            var modalOptions = {show: false};
+            if('undefined' !== typeof this.options.backdrop) {
+                modalOptions.backdrop = this.options.backdrop;
+            }
+            this.$el.modal(modalOptions);
             this.on('ui:modal:render', SnowcapCore.Form.collectionFactory);
 
             this.render();
@@ -145,6 +150,7 @@ var SnowcapBootstrap = (function() {
                 if($modalTrigger.data('options-modal-class')) {
                     options.modalClass = $modalTrigger.data('options-modal-class');
                 }
+                options.backdrop = $modalTrigger.data('options-modal-backdrop');
                 new SnowcapBootstrap.Modal(options);
             });
         });
