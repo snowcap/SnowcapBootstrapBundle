@@ -72,6 +72,11 @@ var SnowcapBootstrap = (function() {
                     var response = JSON.parse(jqXHR.responseText);
                     window.location.href = response.redirect_url;
                     break;
+                case 400:
+                    var response = JSON.parse(jqXHR.responseText);
+                    this.renderBody(response.content);
+                    this.trigger('ui:modal:render');
+                    break;
                 default:
                     console.log(jqXHR);
                     console.log(textStatus);
@@ -106,12 +111,20 @@ var SnowcapBootstrap = (function() {
         render: function() {
             $.get(this.options.url)
                 .done(_.bind(function(data) {
-                    this.$el.html(data.content);
-                    this.$el.find('.modal-body').css('maxHeight', $(window).height() * 0.6);
+                    this.renderBody(data.content);
                     $('body').append(this.$el);
                     this.$el.modal('show');
                     this.trigger('ui:modal:render');
                 }, this));
+        },
+        /**
+         * Render the body
+         *
+         * @param content
+         */
+        renderBody: function(content) {
+            this.$el.html(content);
+            this.$el.find('.modal-body').css('maxHeight', $(window).height() * 0.6);
         }
     });
 
