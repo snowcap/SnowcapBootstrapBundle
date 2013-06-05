@@ -25,7 +25,7 @@ var SnowcapBootstrap = (function() {
                 this.$el.addClass(this.options.modalClass);
             }
             this.$el.modal({show: false});
-            this.on('modal:render', SnowcapCore.Form.collectionFactory);
+            this.on('ui:modal:render', SnowcapCore.Form.collectionFactory);
 
             this.render();
         },
@@ -58,7 +58,7 @@ var SnowcapBootstrap = (function() {
          */
         done: function(data) {
             this.close();
-            this.trigger('modal:success', data.result);
+            this.trigger('ui:modal:success', data);
         },
         /**
          * Called on submit "failure" (30x, 40x, 50x)
@@ -110,7 +110,7 @@ var SnowcapBootstrap = (function() {
                     this.$el.find('.modal-body').css('maxHeight', $(window).height() * 0.6);
                     $('body').append(this.$el);
                     this.$el.modal('show');
-                    this.trigger('modal:render');
+                    this.trigger('ui:modal:render');
                 }, this));
         }
     });
