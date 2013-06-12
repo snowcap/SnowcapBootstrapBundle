@@ -62,8 +62,9 @@ var SnowcapBootstrap = (function() {
          * @param data
          */
         done: function(data) {
-            this.close();
             this.trigger('ui:modal:success', data);
+            this.$el.trigger('ui:modal:success', data);
+            this.close();
         },
         /**
          * Called on submit "failure" (30x, 40x, 50x)
@@ -140,19 +141,17 @@ var SnowcapBootstrap = (function() {
      */
     var modalFactory = function() {
         var $context = (0 === arguments.length) ? $('body') : arguments[0];
-        $context.find('[data-bootstrap=modal]').each(function(offset, modalTrigger) {
-            var $modalTrigger = $(modalTrigger);
-            $($modalTrigger).on('click', function(event) {
-                event.preventDefault();
-                var options = {
-                    url: $modalTrigger.attr('href')
-                };
-                if($modalTrigger.data('options-modal-class')) {
-                    options.modalClass = $modalTrigger.data('options-modal-class');
-                }
-                options.backdrop = $modalTrigger.data('options-modal-backdrop');
-                new SnowcapBootstrap.Modal(options);
-            });
+        $context.on('click', '[data-bootstrap=modal]', function(event) {
+            event.preventDefault();
+            var $modalTrigger = $(event.currentTarget);
+            var options = {
+                url: $modalTrigger.attr('href')
+            };
+            if($modalTrigger.data('options-modal-class')) {
+                options.modalClass = $modalTrigger.data('options-modal-class');
+            }
+            options.backdrop = $modalTrigger.data('options-modal-backdrop');
+            new SnowcapBootstrap.Modal(options);
         });
     };
 
