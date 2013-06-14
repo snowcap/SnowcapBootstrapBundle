@@ -9,7 +9,7 @@ var SnowcapBootstrap = (function() {
         events: function() {
             return {
                 'submit form': 'submit',
-                'click a': 'clickLink',
+                'click a:not([href=#])': 'clickLink',
                 'click [data-bootstrap=modal-confirm]': 'confirm',
                 'hidden': function() {
                     this.$el.empty();
