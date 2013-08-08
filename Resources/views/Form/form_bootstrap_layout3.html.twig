@@ -1,0 +1,202 @@
+{% extends 'form_div_layout.html.twig' %}
+
+{% block form_row %}
+{% spaceless %}
+    {% set row_attr = row_attr|default({}) %}
+    {% set row_attr = row_attr|merge({'class': (row_attr.class|default('') ~ ' form-group')|trim }) %}
+    {% if errors|length > 0 %}
+        {% set row_attr = row_attr|merge({'class': (row_attr.class|default('') ~ ' has-error')|trim }) %}
+    {% endif %}
+    {% set label_attr = label_attr|merge({'class': (label_attr.class|default('') ~ ' control-label')|trim }) %}
+    <div{% for attrname, attrvalue in row_attr %} {{ attrname }}="{{ attrvalue }}"{% endfor %}>
+        {{ form_label(form, null, label_attr) }}
+        {{ form_widget(form, {'attr': attr}) }}
+        {{ block('field_help') }}
+        {{ form_errors(form) }}
+    </div>
+{% endspaceless %}
+{% endblock form_row %}
+
+{% block repeated_row %}
+    {% spaceless %}
+        <div{% if errors|length > 0 %} class="has-error"{% endif %}>
+            {% for child in form %}
+                {{ form_row(child) }}
+            {% endfor %}
+            {{ block('field_help') }}
+            {{ form_errors(form) }}
+        </div>
+    {% endspaceless %}
+{% endblock repeated_row %}
+
+{% block form_label %}
+    {% set label_attr = label_attr|merge({'class': ((label_attr.class|default('')) ~ ' control-label')|trim}) %}
+    {{ parent() }}
+{% endblock form_label %}
+
+{% block collection_widget %}
+    {% spaceless %}
+        {% if prototype is defined %}
+            {% set attr = attr|merge({'data-prototype': form_row(prototype) }) %}
+        {% endif %}
+        <div class="form-collection control-group" data-core="form-collection" style="overflow: auto">
+            {{ block('form_widget') }}
+            {% if allow_add %}
+                <div class="btn-group">
+                    <a href="#" class="btn" data-core="form-collection-add">
+                        <i class="icon-plus-sign"></i> {{ add_label|trans({}, translation_domain) }}
+                    </a>
+                </div>
+            {% endif %}
+        </div>
+    {% endspaceless %}
+{% endblock collection_widget %}
+
+{% block form_errors %}
+    {% spaceless %}
+        {% if errors|length > 0 %}
+            {% for error in errors %}
+                <p class="help-block">
+                    {{
+                        error.messagePluralization is null
+                            ? error.messageTemplate|trans(error.messageParameters, 'validators')
+                            : error.messageTemplate|transchoice(error.messagePluralization, error.messageParameters, 'validators')
+                    }}
+                </p>
+            {% endfor %}
+        {% endif %}
+    {% endspaceless %}
+{% endblock form_errors %}
+
+{% block form_widget_simple %}
+{% set attr = attr|merge({'class': (attr.class|default('') ~ ' form-control')|trim }) %}
+{% spaceless %}
+    {% set type = type|default('text') %}
+    {% set input %}
+        <input type="{{ type }}" {{ block('widget_attributes') }} {% if value is not empty %}value="{{ value }}" {% endif %}/>
+    {% endset %}
+    {% if prepend or append %}
+        {% set prependappend_class = ((prepend ? "input-prepend " : "") ~ (append ? "input-append " : ""))|trim %}
+        <div class="{{ prependappend_class }}">
+            {% if prepend %}
+                <span class="add-on">
+                    {% if prepend_icon is defined %}<i class="icon-{{ prepend_icon }}"></i> {% endif %}
+                    {% if prepend_text is defined %}{{ prepend_text }}{% endif %}
+                </span>
+            {% endif %}
+            {{ input }}
+            {% if append %}
+                <span class="add-on">
+                    {% if append_icon is defined %}<i class="icon-{{ append_icon }}"></i> {% endif %}
+                    {% if append_text is defined %}{{ append_text }}{% endif %}
+                </span>
+            {% endif %}
+        </div>
+    {% else %}
+        {{ input }}
+    {% endif %}
+{% endspaceless %}
+{% endblock form_widget_simple %}
+
+{% block email_widget %}
+{% spaceless %}
+    {% set type = type|default('email') %}
+    <div class="input-prepend">
+        <span class="add-on"><i class="icon-envelope"></i></span>{{ block('form_widget') }}
+    </div>
+{% endspaceless %}
+{% endblock email_widget %}
+
+{% block checkbox_row %}
+    {% if label is empty %}
+        {% set label = name|humanize %}
+    {% endif %}
+
+    {% spaceless %}
+    <div class="checkbox{% if errors|length > 0 %} has-error{% endif %}">
+        <label{% for attrname, attrvalue in label_attr %} {{ attrname }}="{{ attrvalue }}"{% endfor %}>{{ form_widget(form) }}{{ label|trans({}, translation_domain) }}</label>
+        {{ block('field_help') }}
+        {{ form_errors(form) }}
+    </div>
+    {% endspaceless %}
+{% endblock %}
+
+{% block choice_widget %}
+{% spaceless %}
+    {% if expanded %}
+        {% set attr = attr|merge({'class': ((attr.class|default('')) ~ ' input-container')|trim}) %}
+        <div {{ block('widget_container_attributes') }}>
+            <div class="input-container-inner">
+                {% set label_class = multiple ? 'checkbox' : 'radio' %}
+                {% for child in form %}
+                    <label class="{{ label_class }}">
+                        {{ form_widget(child) }}
+                        {{ child.vars['label']|trans({}, translation_domain) }}
+                    </label>
+                {% endfor %}
+            </div>
+        </div>
+    {% else %}
+        {{ parent() }}
+    {% endif %}
+{% endspaceless %}
+{% endblock choice_widget %}
+
+{% block field_help %}
+    {% if help_block is defined %}
+        <p class="help-block">{{ help_block|trans({}, translation_domain)|raw }}</p>
+    {% elseif help_inline is defined %}
+        <span class="help-inline">{{ help_inline|trans({}, translation_domain)|raw }}</span>
+    {% endif %}
+{% endblock field_help %}
+
+{% block snowcap_core_image_widget %}
+    {% if file_url is not null %}
+        <img src="{{ asset(file_url) }}"/><br/>
+    {% endif %}
+    {{ form_widget(form.file) }}
+    {% if file_url is not null and allow_delete %}
+        <label class="checkbox">
+            {{ form_widget(form.delete) }}
+            {{ delete_label is not null ? delete_label|trans({}, translation_domain) : 'Delete' }}
+        </label>
+    {% endif %}
+{% endblock %}
+
+{% block snowcap_core_video_widget %}
+    {{ block('form_widget') }}<br/>
+    {%  if value is not empty %}
+        {% if provider is defined and provider == 'youtube' %}
+            <iframe width="420" height="315" src="http://www.youtube.com/embed/{{ value }}" frameborder="0" allowfullscreen></iframe>
+        {% elseif provider == 'tudou' %}
+            <embed src="http://www.tudou.com/v/{{ value }}/&resourceId=0_05_05_99&bid=05/v.swf" type="application/x-shockwave-flash" allowscriptaccess="always" allowfullscreen="true" wmode="opaque" width="420" height="315"></embed>
+        {% endif %}
+    {% endif %}
+{% endblock %}
+
+{% block snowcap_core_sound_widget %}
+    {{ block('form_widget') }}<br/>
+    {%  if value is not empty %}
+        {% if provider == 'soundcloud' %}
+            <iframe width="420" height="166" scrolling="no" frameborder="no" src="https://w.soundcloud.com/player/?url=http%3A%2F%2Fapi.soundcloud.com%2Ftracks%2F{{ value }}"></iframe>
+        {% endif %}
+    {% endif %}
+{% endblock %}
+
+{% block snowcap_core_file_widget %}
+    {{ form_widget(form.file) }}
+    {{ form_errors(form.file) }}
+    {% if file_url is not null %}
+        <p>
+            <a class="btn" href="{{ asset(file_url) }}" target="_blank">
+                {{ download_label is not null ? download_label|trans({}, translation_domain) : 'Download current file' }}
+            </a>
+        </p>
+    {% endif %}
+    {% if file_url is not null and allow_delete %}
+        <label class="checkbox">
+            {{ form_widget(form.delete) }}
+            {{ delete_label is not null ? delete_label|trans({}, translation_domain) : 'Delete' }}
+        </label>
+    {% endif %}
+{% endblock %}
