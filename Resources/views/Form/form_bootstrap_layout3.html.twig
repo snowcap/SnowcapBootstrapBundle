@@ -29,11 +29,6 @@
     {% endspaceless %}
 {% endblock repeated_row %}
 
-{% block form_label %}
-    {% set label_attr = label_attr|merge({'class': ((label_attr.class|default('')) ~ ' control-label')|trim}) %}
-    {{ parent() }}
-{% endblock form_label %}
-
 {% block collection_widget %}
     {% spaceless %}
         {% if prototype is defined %}
@@ -69,9 +64,12 @@
 {% endblock form_errors %}
 
 {% block form_widget_simple %}
-{% set attr = attr|merge({'class': (attr.class|default('') ~ ' form-control')|trim }) %}
+{% set type = type|default('text') %}
+{% if type != 'file' %}
+    {% set attr = attr|merge({'class': (attr.class|default('') ~ ' form-control')|trim }) %}
+{% endif %}
 {% spaceless %}
-    {% set type = type|default('text') %}
+
     {% set input %}
         <input type="{{ type }}" {{ block('widget_attributes') }} {% if value is not empty %}value="{{ value }}" {% endif %}/>
     {% endset %}
@@ -98,11 +96,17 @@
 {% endspaceless %}
 {% endblock form_widget_simple %}
 
+{% block textarea_widget %}
+    {% set attr = attr|merge({'class': (attr.class|default('') ~ ' form-control')|trim }) %}
+    {{ parent() }}
+{% endblock textarea_widget %}
+
 {% block email_widget %}
 {% spaceless %}
     {% set type = type|default('email') %}
-    <div class="input-prepend">
-        <span class="add-on"><i class="icon-envelope"></i></span>{{ block('form_widget') }}
+    <div class="input-group">
+        <span class="input-group-addon"><i class="glyphicon glyphicon-envelope"></i></span>
+        {{ block('form_widget') }}
     </div>
 {% endspaceless %}
 {% endblock email_widget %}
@@ -126,17 +130,18 @@
     {% if expanded %}
         {% set attr = attr|merge({'class': ((attr.class|default('')) ~ ' input-container')|trim}) %}
         <div {{ block('widget_container_attributes') }}>
-            <div class="input-container-inner">
-                {% set label_class = multiple ? 'checkbox' : 'radio' %}
-                {% for child in form %}
-                    <label class="{{ label_class }}">
+            {% set wrapper_class = multiple ? 'checkbox' : 'radio' %}
+            {% for child in form %}
+                <div class="{{ wrapper_class }}">
+                    <label>
                         {{ form_widget(child) }}
                         {{ child.vars['label']|trans({}, translation_domain) }}
                     </label>
-                {% endfor %}
-            </div>
+                </div>
+            {% endfor %}
         </div>
     {% else %}
+        {% set attr = attr|merge({'class': ((attr.class|default('')) ~ ' form-control')|trim}) %}
         {{ parent() }}
     {% endif %}
 {% endspaceless %}
