@@ -39,7 +39,7 @@
             {% if allow_add %}
                 <div class="btn-group">
                     <a href="#" class="btn btn-default" data-core="form-collection-add">
-                        <i class="icon-plus-sign"></i> {{ add_label|trans({}, translation_domain) }}
+                        <i class="glyphicon glyphicon-plus-sign"></i> {{ add_label|trans({}, translation_domain) }}
                     </a>
                 </div>
             {% endif %}
@@ -69,23 +69,21 @@
     {% set attr = attr|merge({'class': (attr.class|default('') ~ ' form-control')|trim }) %}
 {% endif %}
 {% spaceless %}
-
     {% set input %}
         <input type="{{ type }}" {{ block('widget_attributes') }} {% if value is not empty %}value="{{ value }}" {% endif %}/>
     {% endset %}
     {% if prepend or append %}
-        {% set prependappend_class = ((prepend ? "input-prepend " : "") ~ (append ? "input-append " : ""))|trim %}
-        <div class="{{ prependappend_class }}">
+        <div class="input-group">
             {% if prepend %}
-                <span class="add-on">
-                    {% if prepend_icon is defined %}<i class="icon-{{ prepend_icon }}"></i> {% endif %}
+                <span class="input-group-addon">
+                    {% if prepend_icon is defined %}<i class="glyphicon glyphicon-{{ prepend_icon }}"></i> {% endif %}
                     {% if prepend_text is defined %}{{ prepend_text }}{% endif %}
                 </span>
             {% endif %}
             {{ input }}
             {% if append %}
-                <span class="add-on">
-                    {% if append_icon is defined %}<i class="icon-{{ append_icon }}"></i> {% endif %}
+                <span class="input-group-addon">
+                    {% if append_icon is defined %}<i class="glyphicon glyphicon-{{ append_icon }}"></i> {% endif %}
                     {% if append_text is defined %}{{ append_text }}{% endif %}
                 </span>
             {% endif %}
