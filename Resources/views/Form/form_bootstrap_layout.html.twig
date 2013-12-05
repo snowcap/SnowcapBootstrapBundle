@@ -135,8 +135,10 @@
         <div {{ block('widget_container_attributes') }}>
             <div class="input-container-inner">
                 {% set label_class = multiple ? 'checkbox' : 'radio' %}
+
+                {% set label_attr = label_attr|merge({'class': ((label_class ~ ' ' ~ label_attr.class|default('')) ~ ' control-label')|trim}) %}
                 {% for child in form %}
-                    <label class="{{ label_class }}">
+                    <label{% for attrname, attrvalue in label_attr %} {{ attrname }}="{{ attrvalue }}"{% endfor %}>
                         {{ form_widget(child) }}
                         {{ child.vars['label']|trans({}, translation_domain) }}
                     </label>
