@@ -3,23 +3,26 @@
 namespace Snowcap\BootstrapBundle\Form\Extension;
 
 use Symfony\Component\Form\AbstractTypeExtension;
-use Symfony\Component\OptionsResolver\OptionsResolverInterface;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\FormView;
 use Symfony\Component\Form\FormInterface;
 
+/**
+ * Class HelpTypeExtension
+ * @package Snowcap\BootstrapBundle\Form\Extension
+ */
 class HelpTypeExtension extends AbstractTypeExtension
 {
     /**
-     * @param \Symfony\Component\OptionsResolver\OptionsResolverInterface $resolver
+     * @param \Symfony\Component\OptionsResolver\OptionsResolver $resolver
      */
-    public function setDefaultOptions(OptionsResolverInterface $resolver)
+    public function configureOptions(OptionsResolver $resolver)
     {
         $resolver
-            ->setOptional(array('help_block', 'help_inline'))
-            ->setAllowedTypes(array(
-                'help_block' => 'string',
-                'help_inline' => 'string',
-            ));
+            ->setDefined(array('help_block', 'help_inline'))
+            ->setAllowedTypes('help_block', 'string')
+            ->setAllowedTypes('help_inline', 'string')
+        ;
     }
 
     public function buildView(FormView $view, FormInterface $form, array $options)

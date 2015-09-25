@@ -3,10 +3,14 @@
 namespace Snowcap\BootstrapBundle\Form\Extension;
 
 use Symfony\Component\Form\AbstractTypeExtension;
-use Symfony\Component\OptionsResolver\OptionsResolverInterface;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\FormView;
 use Symfony\Component\Form\FormInterface;
 
+/**
+ * Class PrependAndAppendTypeExtension
+ * @package Snowcap\BootstrapBundle\Form\Extension
+ */
 class PrependAndAppendTypeExtension extends AbstractTypeExtension
 {
     /**
@@ -20,13 +24,14 @@ class PrependAndAppendTypeExtension extends AbstractTypeExtension
     );
 
     /**
-     * @param \Symfony\Component\OptionsResolver\OptionsResolverInterface $resolver
+     * @param \Symfony\Component\OptionsResolver\OptionsResolver $resolver
      */
-    public function setDefaultOptions(OptionsResolverInterface $resolver)
+    public function configureOptions(OptionsResolver $resolver)
     {
-        $resolver
-            ->setOptional($this->prependAndAppendOptions)
-            ->setAllowedTypes(array_combine($this->prependAndAppendOptions, array_fill(0, 4, 'string')));
+        $resolver->setDefined($this->prependAndAppendOptions);
+        foreach ($this->prependAndAppendOptions as $option) {
+            $resolver->setAllowedTypes($option, 'string');
+        }
     }
 
     /**
