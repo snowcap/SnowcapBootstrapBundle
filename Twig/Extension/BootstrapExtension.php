@@ -1,8 +1,6 @@
 <?php
 namespace Snowcap\BootstrapBundle\Twig\Extension;
 
-use Symfony\Component\Form\Util\PropertyPath;
-
 /**
  * Created by JetBrains PhpStorm.
  * User: edwin
@@ -30,7 +28,7 @@ class BootstrapExtension extends \Twig_Extension {
     public function getFunctions()
     {
         return array(
-            'form_row_classes' => new \Twig_Function_Method($this, 'getFormRowClasses'),
+            'form_row_classes' => new \Twig_SimpleFunction($this, 'getFormRowClasses'),
         );
     }
 
