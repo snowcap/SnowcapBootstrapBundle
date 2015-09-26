@@ -34,7 +34,10 @@ class BootstrapExtensionTest extends \PHPUnit_Framework_TestCase
     public function testGetFunctions()
     {
         $filters = $this->extension->getFunctions();
-        $this->assertInstanceOf('\Twig_SimpleFunction', $filters['form_row_classes']);
+        $this->assertEquals(count($filters), 1);
+        $filter = $filters[0];
+        $this->assertInstanceOf('\Twig_SimpleFunction', $filter);
+        $this->assertEquals('form_row_classes', $filter->getName());
     }
 
     /**
