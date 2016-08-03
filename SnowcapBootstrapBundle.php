@@ -6,7 +6,6 @@ use Symfony\Component\HttpKernel\Bundle\Bundle;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 
 use Snowcap\BootstrapBundle\DependencyInjection\Compiler\PaginatorCompilerPass;
-use Snowcap\BootstrapBundle\DependencyInjection\Compiler\LessPhpFilterCompilerPass;
 
 class SnowcapBootstrapBundle extends Bundle
 {
@@ -16,6 +15,5 @@ class SnowcapBootstrapBundle extends Bundle
     public function build(ContainerBuilder $container)
     {
         $container->addCompilerPass(new PaginatorCompilerPass());
-        $container->addCompilerPass(new LessPhpFilterCompilerPass());
     }
 }
